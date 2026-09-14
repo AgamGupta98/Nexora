@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXORA Ω — Universal Adaptive Intelligence Runtime</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/nexora_logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/nexora.css" />
+</head>
+<body>
+
+  <!-- Top Cyber HUD Header -->
+  <header class="hud-header">
+    <div class="brand-section">
+      <!-- Animated Custom Vector Logo -->
+      <img src="/assets/nexora_logo.svg" alt="NEXORA Logo" class="brand-logo-img" />
+      <div class="brand-title">
+        NEXORA <span class="omega">Ω</span>
+      </div>
+      <div class="brand-tag">v0.2.0-PRO</div>
+      <div class="mission-box">
+        <div>
+          <div class="mission-label">MISSION STATUS</div>
+          <div class="mission-goal" id="missionGoal">Maintain safe adaptive operation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Autopilot Toggle -->
+      <div class="autopilot-switch" id="autopilotSwitch" title="Toggle Autonomous Mission Loop (Hands-Free Simulation)">
+        <span class="autopilot-dot"></span>
+        <span class="autopilot-label">AUTOPILOT</span>
+      </div>
+
+      <div id="modeBadge" class="mode-badge mode-NORMAL">NORMAL</div>
+
+      <button class="btn-cyber btn-warning" id="btnAnomaly" title="Inject simulated multi-sensor spike">
+        ⚠️ ANOMALY
+      </button>
+      <button class="btn-cyber btn-danger" id="btnFailure" title="Simulate primary comm failure and auto-quarantine/self-heal">
+        ⚡ FAILOVER & HEAL
+      </button>
+      <button class="btn-cyber btn-reset" id="btnReset" title="Reset system state & restore all nodes">
+        🔄 RESET
+      </button>
+
+      <button class="btn-cyber" id="btnAudio" title="Toggle audio SFX">
+        🔊 SFX ON
+      </button>
+      <button class="btn-cyber" id="btnVoice" title="Toggle AI voice synthesis synthesizer">
+        🗣️ VOICE ON
+      </button>
+
+      <div class="brand-tag" id="uptimeClock" style="min-width: 75px; text-align: center;">--:--:--</div>
+    </div>
+  </header>
+
+  <!-- 3-Column Tactical Command Grid -->
+  <main class="dashboard-grid">
+
+    <!-- Column 1: Tri-View Visualizer, Vitals & Sensor Array -->
+    <aside class="grid-column-left">
+
+      <!-- Tri-View Visualizer Panel -->
+      <div class="cyber-panel">
+        <div class="panel-title">
+          <span>Holographic Visualizer</span>
+          <span class="indicator"></span>
+        </div>
+
+        <div class="deck-tabs">
+          <button class="deck-tab-btn active" id="tabReactor">ARC REACTOR</button>
+          <button class="deck-tab-btn" id="tabTwin">3D DIGITAL TWIN</button>
+          <button class="deck-tab-btn" id="tabRadar">GPS RADAR</button>
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="mainVisualizerCanvas"></canvas>
+          <div class="canvas-meta">
+            <div class="canvas-status-text">NEURAL TWIN ONLINE</div>
+            <div class="canvas-subtext" id="gpsCoordinates">28.6139° N, 77.2090° E (Alt: 216m)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Vitals & Temporal History -->
+      <div class="cyber-panel">
+        <div class="panel-title">
+          <span>System Vitals & Risk</span>
+          <span class="indicator"></span>
+        </div>
+
+        <div class="metrics-list">
+          <div class="metric-row">
+            <div class="metric-header">
+              <span>SYSTEM HEALTH</span>
+              <span class="metric-val" id="valHealth">96.8%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar bar-green" id="barHealth" style="width: 96.8%;"></div>
+            </div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-header">
+              <span>SECURITY TRUST (6-FACTOR)</span>
+              <span class="metric-val" id="valSecurity">98.4%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="barSecurity" style="width: 98.4%;"></div>
+            </div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-header">
+              <span>CURRENT RISK</span>
+              <span class="metric-val" id="valRisk">39%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar bar-amber" id="barRisk" style="width: 39%;"></div>
+            </div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-header">
+              <span>AI RISK PREDICTION</span>
+              <span class="metric-val" id="valPrediction">82%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar bar-purple" id="barPrediction" style="width: 82%;"></div>
+            </div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-header">
+              <span>POWER BUDGET</span>
+              <span class="metric-val" id="valEnergy">54W</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="barEnergy" style="width: 54%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Oscilloscope Canvas -->
+        <div style="margin-top: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.62rem; color: var(--text-dim);">
+            <span>LIVE OSCILLOSCOPE</span>
+            <span><span style="color: #00ffaa;">● HEALTH</span> &nbsp; <span style="color: #ff3366;">● RISK</span> &nbsp; <span style="color: #00f0ff;">● TEMP</span></span>
+          </div>
+          <canvas id="historyChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Sensor Telemetry Array & Live Sliders -->
+      <div class="cyber-panel">
+        <div class="panel-title">
+          <span>Sensor Telemetry Array</span>
+          <span class="indicator"></span>
+        </div>
+        <div class="env-grid">
+          <div class="env-card">
+            <span class="env-card-title">TEMPERATURE</span>
+            <span class="env-card-value" id="envTemp">26.4°C</span>
+          </div>
+          <div class="env-card">
+            <span class="env-card-title">HUMIDITY</span>
+            <span class="env-card-value" id="envHumidity">48.2%</span>
+          </div>
+          <div class="env-card">
+            <span class="env-card-title">GAS LEVEL</span>
+            <span class="env-card-value" id="envGas">12 ppm</span>
+          </div>
+          <div class="env-card">
+            <span class="env-card-title">VIBRATION</span>
+            <span class="env-card-value" id="envVib">0.12 g</span>
+          </div>
+          <div class="env-card" style="grid-column: span 2;">
+            <span class="env-card-title">AMBIENT LUX</span>
+            <span class="env-card-value" id="envLight">72 lux</span>
+          </div>
+        </div>
+
+        <!-- Interactive Sensor Sliders -->
+        <div class="sensor-tuning-box">
+          <div class="sensor-slider-row">
+            <span class="sensor-slider-label">TEMP INJECT:</span>
+            <input type="range" id="sliderTemp" class="sensor-slider" min="15" max="65" step="0.5" value="26.4">
+            <span class="sensor-slider-val" id="valSliderTemp">26.4°C</span>
+          </div>
+          <div class="sensor-slider-row">
+            <span class="sensor-slider-label">GAS INJECT:</span>
+            <input type="range" id="sliderGas" class="sensor-slider" min="5" max="95" step="1" value="12">
+            <span class="sensor-slider-val" id="valSliderGas">12 ppm</span>
+          </div>
+          <div class="sensor-slider-row">
+            <span class="sensor-slider-label">VIB INJECT:</span>
+            <input type="range" id="sliderVib" class="sensor-slider" min="0.05" max="1.3" step="0.02" value="0.12">
+            <span class="sensor-slider-val" id="valSliderVib">0.12 g</span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Column 2: Tactical AI Terminal & Cognitive Feed -->
+    <section class="grid-column-center">
+      <div class="cyber-panel terminal-container">
+        <div class="panel-title">
+          <span>Tactical Intelligence Terminal</span>
+          <span class="brand-tag">NIST AI RMF COMPLIANT</span>
+        </div>
+
+        <!-- Message Thread -->
+        <div class="chat-history" id="chatHistory">
+          <div class="msg-wrapper nexora">
+            <div class="msg-header">
+              <span>NEXORA Ω</span>
+              <span>COGNITIVE ENGINE ONLINE</span>
+            </div>
+            <div class="msg-bubble">
+              NEXORA Ω Universal Adaptive Intelligence Runtime initialized. Multi-layer memory fabric, real AI reasoning, GPS edge telemetry, and zero-trust sandbox online. Issue instructions by text, chips, or voice.
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Command Chips -->
+        <div class="prompt-chips">
+          <button class="chip-btn" data-cmd="system status">📊 System Status</button>
+          <button class="chip-btn" data-cmd="optimize energy">⚡ Optimize Energy</button>
+          <button class="chip-btn" data-cmd="security audit">🛡️ Security Audit</button>
+          <button class="chip-btn" data-cmd="predict future risk">🔮 Predict Risk</button>
+          <button class="chip-btn" data-cmd="run digital twin simulation">🧪 Run Simulation</button>
+        </div>
+
+        <!-- Terminal Input Bar -->
+        <div class="terminal-input-bar">
+          <input
+            type="text"
+            id="commandInput"
+            class="terminal-input"
+            placeholder="Issue command to NEXORA Ω or click 🎙️ to speak..."
+            autocomplete="off"
+          />
+          <button class="btn-mic" id="btnMic" title="Click to speak (Voice Recognition)">🎙️</button>
+          <button class="btn-cyber" id="btnSend">TRANSMIT ▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Column 3: Hardware Device Fleet & Capability Matrix -->
+    <aside class="grid-column-right">
+
+      <!-- Device Fleet & Isolation Matrix -->
+      <div class="cyber-panel">
+        <div class="panel-title">
+          <span>Device Fleet & Trust Matrix</span>
+          <span class="indicator"></span>
+        </div>
+        <div class="device-grid" id="deviceList">
+          <!-- Populated by JS with live IP and [ISOLATE]/[RESTORE] buttons -->
+        </div>
+      </div>
+
+      <!-- AI Model Router -->
+      <div class="cyber-panel">
+        <div class="panel-title">
+          <span>Adaptive Model Router</span>
+          <span class="indicator"></span>
+        </div>
+        <div class="device-grid" id="modelList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Capability Graph -->
+      <div class="cyber-panel">
+        <div class="panel-title">
+          <span>Capability Graph (Click for Details)</span>
+          <span class="indicator"></span>
+        </div>
+        <div class="caps-wrap" id="capabilityList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- Bottom Kernel Event Log Stream -->
+  <footer class="cyber-panel" style="margin-bottom: 0;">
+    <div class="panel-title" style="margin-bottom: 5px;">
+      <span>Kernel Event Log Stream</span>
+      <span class="brand-tag">SQLITE PERSISTENT LOG</span>
+    </div>
+    <div class="event-log-box" id="eventLogs">
+      <!-- Populated by JS -->
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       FLOATING COMPACT CYBER CHATBOX WIDGET (Bottom Right)
+       Requested: "chatbox ak vhii chaoat sa icon nivhe hona cahiay"
+  ========================================================= -->
+  <div class="floating-chat-trigger" id="floatingChatTrigger" title="Open NEXORA AI Assistant">
+    <img src="/assets/nexora_logo.svg" alt="Chat Assistant" class="floating-chat-icon" />
+  </div>
+
+  <div class="floating-chat-window" id="floatingChatWindow">
+    <div class="floating-chat-header">
+      <div class="floating-chat-title">
+        <img src="/assets/nexora_logo.svg" style="width: 20px; height: 20px;" alt="Logo" />
+        NEXORA Ω ASSISTANT
+      </div>
+      <button class="floating-chat-close" id="floatingChatClose">✕</button>
+    </div>
+    <div class="floating-chat-messages" id="floatingChatMessages">
+      <!-- Populated by JS synchronized with main chat -->
+    </div>
+    <div class="floating-chat-input-bar">
+      <input type="text" id="floatingChatInput" class="terminal-input" placeholder="Type prompt..." />
+      <button class="btn-cyber" id="floatingChatSend">SEND</button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       HUMAN-IN-THE-LOOP APPROVAL MODAL (NIST AI RMF Gating)
+  ========================================================= -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="approval-modal">
+      <div class="approval-header">
+        <span>⚠️ HUMAN APPROVAL REQUIRED</span>
+      </div>
+      <div class="approval-body">
+        <p><strong>Action Intercepted:</strong> <span id="approvalAction">CRITICAL_ACTUATION</span></p>
+        <p style="margin-top: 8px;" id="approvalReason">Risk threshold crossed. Operator authorization required under NIST AI RMF safety protocol.</p>
+      </div>
+      <div class="approval-actions">
+        <button class="btn-cyber btn-danger" id="btnReject">REJECT / ABORT</button>
+        <button class="btn-cyber btn-reset" id="btnApprove">AUTHORIZE EXECUTION</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

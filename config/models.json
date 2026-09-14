@@ -1,0 +1,56 @@
+{
+  "active_router": "adaptive_weighted_v1",
+  "models": [
+    {
+      "id": "llm.local",
+      "name": "NEXORA Neural-8B Small",
+      "type": "language",
+      "provider": "llama.cpp",
+      "context_window": 8192,
+      "offline": true,
+      "latency_ms": 120,
+      "energy_watts": 3,
+      "trust_score": 97,
+      "status": "online"
+    },
+    {
+      "id": "vision.local",
+      "name": "NEXORA Spatial Vision-V2",
+      "type": "vision",
+      "provider": "onnx-runtime",
+      "resolution": "1920x1080",
+      "offline": true,
+      "latency_ms": 84,
+      "energy_watts": 4,
+      "trust_score": 98,
+      "status": "online"
+    },
+    {
+      "id": "predictor.local",
+      "name": "State Drift & Anomaly Predictor",
+      "type": "prediction",
+      "provider": "tensorrt-embedded",
+      "offline": true,
+      "latency_ms": 41,
+      "energy_watts": 2,
+      "trust_score": 96,
+      "status": "online"
+    },
+    {
+      "id": "cloud.llm",
+      "name": "NEXORA Deep Reasoner Heavy",
+      "type": "language",
+      "provider": "cloud-cluster",
+      "offline": false,
+      "latency_ms": 310,
+      "energy_watts": 7,
+      "trust_score": 94,
+      "status": "standby"
+    }
+  ],
+  "routing_policy": {
+    "offline_first": true,
+    "fallback_chain": ["llm.local", "cloud.llm"],
+    "trust_min_threshold": 40
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "plugins_directory": "plugins",
+  "installed_plugins": [
+    {
+      "id": "vision.yolo",
+      "name": "YOLO Spatial Vision Perception",
+      "version": "1.4.0",
+      "author": "NEXORA Core Systems",
+      "capabilities": ["vision.object_detection", "vision.scene_understanding"],
+      "permissions": ["camera.read", "memory.read"],
+      "offline": true,
+      "sandbox_policy": "STRICT_CONTAINED"
+    },
+    {
+      "id": "sensor.esp32_mqtt",
+      "name": "ESP32 Multimodal Edge Sensor Bridge",
+      "version": "2.1.0",
+      "author": "Edge Hardware Fabric",
+      "capabilities": ["perception.sensor_fusion"],
+      "permissions": ["network.local", "telemetry.write"],
+      "offline": true,
+      "sandbox_policy": "STRICT_CONTAINED"
+    },
+    {
+      "id": "gps.gnss_driver",
+      "name": "NMEA GNSS Satellite Receiver",
+      "version": "1.0.2",
+      "author": "Geospatial Labs",
+      "capabilities": ["perception.gps_tracking"],
+      "permissions": ["serial.read", "telemetry.write"],
+      "offline": true,
+      "sandbox_policy": "STRICT_CONTAINED"
+    },
+    {
+      "id": "speech.whisper_edge",
+      "name": "Edge Speech-to-Text Transcriber",
+      "version": "0.9.1",
+      "author": "Open Source AI",
+      "capabilities": ["perception.speech_stt"],
+      "permissions": ["audio.record"],
+      "offline": true,
+      "sandbox_policy": "STANDBY"
+    }
+  ],
+  "security": {
+    "zero_trust_enforced": true,
+    "require_signed_manifests": true,
+    "block_filesystem_write": true,
+    "block_raw_shell_execution": true
+  }
+}
